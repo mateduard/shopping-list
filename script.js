@@ -39,32 +39,32 @@ function createListItem(item) {  // RETURNS CREATED ITEM WIRH "item" CONTENT
 }
 
 function addShoppingItem(item, recur) {
-  if(!isDuplicate(item)){
-  const ul = document.querySelector('ul');
-  const li = createListItem(item)
+  if (!isDuplicate(item)) {
+    const ul = document.querySelector('ul');
+    const li = createListItem(item)
 
-  let listOfItems = [];
-  if (localStorage.getItem('items') === null) {
-    listOfItems = [];
-  } else {
-    listOfItems = JSON.parse(localStorage.getItem('items'));
+    let listOfItems = [];
+    if (localStorage.getItem('items') === null) {
+      listOfItems = [];
+    } else {
+      listOfItems = JSON.parse(localStorage.getItem('items'));
+    }
+
+    if (recur) {
+      li.classList.add('btn-recur');
+
+      listOfItems.push('1' + item);
+      localStorage.setItem('items', JSON.stringify(listOfItems));
+
+      ul.insertAdjacentElement('afterbegin', li);
+
+    } else {
+      listOfItems.push('0' + item);
+      localStorage.setItem('items', JSON.stringify(listOfItems));
+
+      ul.appendChild(li);
+    }
   }
-
-  if (recur) {
-    li.classList.add('btn-recur');
-
-    listOfItems.push('1' + item);
-    localStorage.setItem('items', JSON.stringify(listOfItems));
-
-    ul.insertAdjacentElement('afterbegin', li);
-
-  } else {
-    listOfItems.push('0' + item);
-    localStorage.setItem('items', JSON.stringify(listOfItems));
-
-    ul.appendChild(li);
-  }
-}
 }
 
 /* // INSERTING ITEMS
@@ -121,7 +121,7 @@ function nightDayModeStyle() {
     body.style.backgroundColor = 'white';
     body.style.color = 'black';
     document.querySelector('#clear').style.color = 'black';
-    document.querySelector('ul li.btn-recur').style.backgroundColor='#dedede';
+    document.querySelector('ul li.btn-recur').style.backgroundColor = '#dedede';
     document.querySelector('#filter').style.color = 'black';
     document.querySelector('::placeholder').style.color = 'red';
   }
@@ -242,9 +242,9 @@ function addShoppingItemFromStorage(item, recur) {
 // LOADING ITEMS FROM LOCAL STORAGE
 
 function loadItemsFromStorage() {
-  if (localStorage.getItem('items')) {
-    const itemsToLoad = JSON.parse(localStorage.getItem('items'));
-
+  const itemsToLoad = JSON.parse(localStorage.getItem('items'));
+  if (itemsToLoad.length > 0) {
+    console.log(itemsToLoad.length);
     for (elem of itemsToLoad) {
       if (elem.slice(0, 1) === '1') {
         addShoppingItemFromStorage(elem.slice(1), true);
@@ -258,10 +258,10 @@ function loadItemsFromStorage() {
 
 // CHECK FOR DUPLICATE ITEM
 
-function isDuplicate(itemName){
-  for(elem of document.querySelectorAll('ul li')){
-    if(elem.textContent.toLowerCase() === itemName.toLowerCase()){
-      alert('The item '+elem.textContent+' already exists.');
+function isDuplicate(itemName) {
+  for (elem of document.querySelectorAll('ul li')) {
+    if (elem.textContent.toLowerCase() === itemName.toLowerCase()) {
+      alert('The item ' + elem.textContent + ' already exists.');
       return 1;
     }
   }
