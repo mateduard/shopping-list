@@ -4,3 +4,5 @@ Compared to te course's version, I added a daymode/ nightmode function activated
 Another functionality added compared to the course is the 'Recurring items', which have special styiling and can't be deleted by Clear All button.
 
 <img src="images/daymode.png" width="300"><img src="images/nightmode.png" width="305">
+
+You can try it here: https://jolly-kheer-2a8ec4.netlify.app/
