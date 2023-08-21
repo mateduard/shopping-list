@@ -121,15 +121,20 @@ function nightDayModeStyle() {
     body.style.backgroundColor = 'white';
     body.style.color = 'black';
     document.querySelector('#clear').style.color = 'black';
+    document.querySelector('ul li.btn-recur').style.backgroundColor='#dedede';
+    document.querySelector('#filter').style.color = 'black';
+    document.querySelector('::placeholder').style.color = 'red';
   }
   else {
     body.style.backgroundColor = 'black';
     body.style.color = 'white';
     document.querySelector('#clear').style.color = 'white';
+    document.querySelector('ul li.btn-recur').style.backgroundColor = '#4d4d4d';
+    document.querySelector('#filter').style.color = 'white';
   }
 }
 
-document.querySelector('img').addEventListener('dblclick', nightDayModeStyle);
+document.querySelector('img').addEventListener('click', nightDayModeStyle);
 
 // ADD PRODUCTS VISUALLY IN THE LIST
 
@@ -266,5 +271,3 @@ function isDuplicate(itemName){
 
 loadItemsFromStorage();
 showFilterIfItems();
-
-isDuplicate('yes');
