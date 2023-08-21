@@ -116,21 +116,25 @@ document.querySelector('#clear').addEventListener('click', clearList1);
 
 function nightDayModeStyle() {
   const body = document.querySelector('body');
-
+  const recurs = document.querySelector('ul li.btn-recur');
   if (body.style.backgroundColor === 'black') {
     body.style.backgroundColor = 'white';
     body.style.color = 'black';
     document.querySelector('#clear').style.color = 'black';
-    document.querySelector('ul li.btn-recur').style.backgroundColor = '#dedede';
     document.querySelector('#filter').style.color = 'black';
-    document.querySelector('::placeholder').style.color = 'red';
+    if(recurs){
+      recurs.style.backgroundColor = '#dedede';
+    }
   }
   else {
     body.style.backgroundColor = 'black';
     body.style.color = 'white';
     document.querySelector('#clear').style.color = 'white';
-    document.querySelector('ul li.btn-recur').style.backgroundColor = '#4d4d4d';
     document.querySelector('#filter').style.color = 'white';
+    if (recurs) {
+      recurs.style.backgroundColor = '#4d4d4d';
+      recurs.style.borderColor = 'white';
+    }
   }
 }
 
@@ -244,7 +248,6 @@ function addShoppingItemFromStorage(item, recur) {
 function loadItemsFromStorage() {
   const itemsToLoad = JSON.parse(localStorage.getItem('items'));
   if (itemsToLoad.length > 0) {
-    console.log(itemsToLoad.length);
     for (elem of itemsToLoad) {
       if (elem.slice(0, 1) === '1') {
         addShoppingItemFromStorage(elem.slice(1), true);

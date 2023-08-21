@@ -102,7 +102,7 @@ ul li.btn-recur {
 }
 
 .btn-clear:hover {
-  background-color: #f1f1f1;
+  background-color: #c4c4c4;
 }
 
 .text-red {
@@ -146,7 +146,3 @@ ul li.btn-recur {
     width: 100%;
   }
 }
-
-/* #filter::placeholder{
-  color: #bababa;
-} */
