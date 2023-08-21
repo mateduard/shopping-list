@@ -2,7 +2,7 @@ const ul = document.querySelector('ul');
 const form = document.querySelector('#item-form');
 const submitBtn = document.querySelector('#submitBtn');
 const itemInput = document.querySelector('#item-input');
-const filterInput = document.getElementById('filter');
+const filterInput = document.querySelector('#filter');
 const clearButton = document.getElementById('clear');
 const li = document.querySelector('ul li');
 
@@ -21,9 +21,8 @@ addListItem('Bananas'); */
 
 // ADD ITEM SECOND WAY, BETTER WAY.
 
-function addShoppingItem(item, recur) {
-  const ul = document.querySelector('ul');
-  const a = item[0].toUpperCase() + item.slice(1).toLowerCase();
+function createListItem(item) {  // RETURNS CREATED ITEM WIRH "item" CONTENT
+  const a = item[0].toUpperCase() + item.slice(1).toLowerCase(); //Capitalized text
   const li = document.createElement('li');
   li.appendChild(document.createTextNode(a));
 
@@ -36,18 +35,37 @@ function addShoppingItem(item, recur) {
   button.appendChild(icon);
   li.appendChild(button);
 
+  return (li);
+}
+
+function addShoppingItem(item, recur) {
+  if(!isDuplicate(item)){
+  const ul = document.querySelector('ul');
+  const li = createListItem(item)
+
+  let listOfItems = [];
+  if (localStorage.getItem('items') === null) {
+    listOfItems = [];
+  } else {
+    listOfItems = JSON.parse(localStorage.getItem('items'));
+  }
 
   if (recur) {
     li.classList.add('btn-recur');
+
+    listOfItems.push('1' + item);
+    localStorage.setItem('items', JSON.stringify(listOfItems));
+
     ul.insertAdjacentElement('afterbegin', li);
+
   } else {
+    listOfItems.push('0' + item);
+    localStorage.setItem('items', JSON.stringify(listOfItems));
+
     ul.appendChild(li);
   }
-
 }
-
-addShoppingItem('Brezels');
-addShoppingItem('chOCoLAtE');
+}
 
 /* // INSERTING ITEMS
 
@@ -72,7 +90,7 @@ insertAfter(li, firstItem); */
   const list = document.querySelector('ul').children;
   listConverted = Array.from(list);
   listConverted.forEach(item => item.remove());
-  hideItems();
+  hideFilterIfNoItems();
 } */
 
 // document.querySelector('#clear').addEventListener('click', clearList);
@@ -80,7 +98,19 @@ insertAfter(li, firstItem); */
 function clearList1() {
   const items = document.querySelectorAll('ul li');
   items.forEach(item => { if (!item.classList.contains('btn-recur')) { item.remove() } });
-  hideItems();
+  hideFilterIfNoItems();
+
+  const itemsToClear = JSON.parse(localStorage.getItem('items'));
+
+  let i = 0;
+  while (itemsToClear[i] !== undefined) {   // DELETE NON-RECURRING ITEMS FROM LOCAL STORAGE
+    if (itemsToClear[i].slice(0, 1) === '0') {
+      itemsToClear.splice(i, 1);
+      i--;  // PUSH INDEX BACK ONE POSITION AFTER REMOVING ITEM
+    }
+    i++;
+  }
+  localStorage.setItem('items', JSON.stringify(itemsToClear));
 }
 document.querySelector('#clear').addEventListener('click', clearList1);
 
@@ -110,7 +140,7 @@ function addVisualItem(e) {
   }
   else {
     const isChecked = document.getElementById('checkbox').checked;
-    showItems();
+    showFilter();
     addShoppingItem(itemInput.value, isChecked);
   }
 }
@@ -121,7 +151,6 @@ submitBtn.addEventListener('click', addVisualItem);
 
 function filterItems(e) {
   const items = document.querySelectorAll('ul li');
-  console.log(e.target.value);
   items.forEach(element => {
     if (!(element.childNodes[0].nodeValue.toLowerCase().includes(e.target.value.toLowerCase()))) {
       element.classList.add('invisible');
@@ -136,29 +165,106 @@ filterInput.addEventListener('input', filterItems);
 // DELETE EACH PRODUCT
 
 function removeShoppingItem(e) {
-  if (e.target.tagName === 'I')
-    e.target.parentElement.parentElement.remove();
-  hideItems();
+  const targetedItem = e.target.parentElement.parentElement;
+  let isRecur;
+  if (targetedItem.classList.contains('btn-recur')) {
+    isRecur = '1';
+  } else {
+    isRecur = '0';
+  }
+  if (e.target.tagName === 'I') {
+    const itemsFromStorage = JSON.parse(localStorage.getItem('items'));
+
+    for (index in itemsFromStorage) {
+      if ((itemsFromStorage[index].slice(1).toLowerCase() === targetedItem.textContent.toLowerCase()) &&
+        (itemsFromStorage[index].slice(0, 1) === isRecur)) {
+        itemsFromStorage.splice(index, 1);
+        break;
+      }
+    }
+    localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+
+    targetedItem.remove();
+    hideFilterIfNoItems();
+  }
 }
 
 document.querySelector('ul').addEventListener('click', removeShoppingItem);
 
 // NO ITEMS ON SCREEN
 
-function hideItems() {
+function hideFilterIfNoItems() {
   const hasChild = ul.children.length > 0 ? true : false;
   if (!hasChild) {
-    li.classList.add('invisible');
     ul.classList.add('invisible');
     filterInput.classList.add('invisible');
     clearButton.classList.add('invisible');
   }
 }
 
-function showItems() {
-  li.classList.remove('invisible');
+// UN-HIDE SOME ELEMENTS 
+
+function showFilter() {
   ul.classList.remove('invisible');
   filterInput.classList.remove('invisible');
   clearButton.classList.remove('invisible');
 }
 
+// UN-HIDE SOME ELEMENTS IF NO ITEMS IN LIST
+
+function showFilterIfItems() {
+  const hasChild = ul.children.length > 0 ? true : false;
+  if (hasChild) {
+    showFilter();
+  }
+}
+
+// ADD SHOPPING ITEM WITHOUT INSERTING TO MEMORY
+
+function addShoppingItemFromStorage(item, recur) {
+  const ul = document.querySelector('ul');
+  const li = createListItem(item)
+
+  if (recur) {
+    li.classList.add('btn-recur');
+    ul.insertAdjacentElement('afterbegin', li);
+  } else {
+    ul.appendChild(li);
+  }
+
+}
+
+// LOADING ITEMS FROM LOCAL STORAGE
+
+function loadItemsFromStorage() {
+  if (localStorage.getItem('items')) {
+    const itemsToLoad = JSON.parse(localStorage.getItem('items'));
+
+    for (elem of itemsToLoad) {
+      if (elem.slice(0, 1) === '1') {
+        addShoppingItemFromStorage(elem.slice(1), true);
+      } else {
+        addShoppingItemFromStorage(elem.slice(1), false);
+      }
+    }
+    showFilter();
+  }
+}
+
+// CHECK FOR DUPLICATE ITEM
+
+function isDuplicate(itemName){
+  for(elem of document.querySelectorAll('ul li')){
+    if(elem.textContent.toLowerCase() === itemName.toLowerCase()){
+      alert('The item '+elem.textContent+' already exists.');
+      return 1;
+    }
+  }
+  return 0;
+}
+
+
+loadItemsFromStorage();
+showFilterIfItems();
+
+isDuplicate('yes');

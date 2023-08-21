@@ -22,13 +22,7 @@
       <div class="form-control">
         <input type="text" class="form-input" id="item-input" name="item" placeholder="Enter Item" />
       </div>
-      <!-- <select id="priority-input" name="priority" class="form-input">
-        <option value="0">Select Priority</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-      </select> -->
-      <input type="checkbox" id="checkbox"/> 
+      <input type="checkbox" id="checkbox" />
       <label for="checkbox">Recurring item</label>
       <div class="form-control">
         <button type="submit" class="btn" id="submitBtn">
@@ -38,37 +32,13 @@
     </form>
 
     <div class="filter">
-      <input type="text" class="form-input-filter" id="filter" placeholder="Filter Items" />
+      <input type="text" class="form-input-filter invisible" id="filter" placeholder="Filter Items" />
     </div>
 
-    <ul id="item-list" class="items">
-      <li>
-        Apples
-        <button class="remove-item btn-link text-red">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </li>
-      <li>
-        Orange Juice
-        <button class="remove-item btn-link text-red">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </li>
-      <li>
-        Oreos
-        <button class="remove-item btn-link text-red">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </li>
-      <li>
-        Milk
-        <button class="remove-item btn-link text-red">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </li>
+    <ul id="item-list" class="items invisible">
     </ul>
 
-    <button id="clear" class="btn-clear">Clear All</button>
+    <button id="clear" class="btn-clear invisible">Clear Non-Recurring Items</button>
   </div>
 
   <script src="script.js"></script>
