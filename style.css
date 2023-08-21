@@ -126,7 +126,8 @@ ul li.btn-recur {
   padding: 10px 15px;
   margin: 0 5px 20px;
   font-weight: 700;
-  cursor: pointer;
+  cursor: default;
+  background-color: inherit;
 }
 
 .items li button i {

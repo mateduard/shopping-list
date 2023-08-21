@@ -64,6 +64,7 @@ function addShoppingItem(item, recur) {
 
       ul.appendChild(li);
     }
+    checkUiColors();
   }
 }
 
@@ -114,16 +115,19 @@ function clearList1() {
 }
 document.querySelector('#clear').addEventListener('click', clearList1);
 
-function nightDayModeStyle() {
+function onNightDayModeStyle() {
   const body = document.querySelector('body');
-  const recurs = document.querySelector('ul li.btn-recur');
+  const recurs = document.querySelectorAll('ul li.btn-recur');
   if (body.style.backgroundColor === 'black') {
-    body.style.backgroundColor = 'white';
+    body.style.backgroundColor = '#f5f5f5';
     body.style.color = 'black';
     document.querySelector('#clear').style.color = 'black';
     document.querySelector('#filter').style.color = 'black';
-    if(recurs){
-      recurs.style.backgroundColor = '#dedede';
+    if (recurs) {
+      for (elem of recurs) {
+        elem.style.backgroundColor = '#dedede';
+        elem.style.borderColor = 'black';
+      }
     }
   }
   else {
@@ -132,13 +136,15 @@ function nightDayModeStyle() {
     document.querySelector('#clear').style.color = 'white';
     document.querySelector('#filter').style.color = 'white';
     if (recurs) {
-      recurs.style.backgroundColor = '#4d4d4d';
-      recurs.style.borderColor = 'white';
+      for (elem of recurs) {
+        elem.style.backgroundColor = '#4d4d4d';
+        elem.style.borderColor = 'white';
+      }
     }
   }
 }
 
-document.querySelector('img').addEventListener('click', nightDayModeStyle);
+document.querySelector('img').addEventListener('click', onNightDayModeStyle);
 
 // ADD PRODUCTS VISUALLY IN THE LIST
 
@@ -240,7 +246,6 @@ function addShoppingItemFromStorage(item, recur) {
   } else {
     ul.appendChild(li);
   }
-
 }
 
 // LOADING ITEMS FROM LOCAL STORAGE
@@ -269,6 +274,33 @@ function isDuplicate(itemName) {
     }
   }
   return 0;
+}
+
+// CHECK UI FOR NIGHT MODE
+
+function checkUiColors() {
+  const body = document.querySelector('body');
+  const recurs = document.querySelectorAll('ul li.btn-recur');
+  if (body.style.backgroundColor === 'black') {
+    body.style.color = 'white';
+    document.querySelector('#clear').style.color = 'white';
+    document.querySelector('#filter').style.color = 'white';
+    if (recurs) {
+      for (elem of recurs) {
+        elem.style.backgroundColor = '#4d4d4d';
+        elem.style.borderColor = 'white';
+      }
+    }
+  } else {
+    document.querySelector('#clear').style.color = 'black';
+    document.querySelector('#filter').style.color = 'black';
+    if (recurs) {
+      for (elem of recurs) {
+        elem.style.backgroundColor = '#dedede';
+        elem.style.borderColor = 'black';
+      }
+    }
+  }
 }
 
 
